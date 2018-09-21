@@ -23,12 +23,15 @@ namespace IP2GeoLocation
             {
                 l.CreateAppConfig();
             }
+            comboBoxGames.Items.Clear();
+            comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5" });
+            comboBoxGames.SelectedIndex = 0;
+
             this.Activated += new EventHandler(Form1_Activated);
             this.ListBoxIP.SelectedValueChanged += new EventHandler(ListBoxIP_SelectedValueChanged);
             this.Closed += new EventHandler(Form1_Closed);
-
-
         }
+
         private void Form1_Activated(object sender, EventArgs e)
         {
             if (File.Exists(String.Concat(Application.ExecutablePath, ".config")))
@@ -39,9 +42,6 @@ namespace IP2GeoLocation
                 sshUser = config.AppSettings.Settings["User"].Value;
                 sshPass = config.AppSettings.Settings["Pass"].Value;
             }
-            comboBoxGames.Items.Clear();
-            comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5" });
-            comboBoxGames.SelectedIndex = 0;
         }
 
         private void Form1_Closed(object sender, EventArgs e)
@@ -68,7 +68,10 @@ namespace IP2GeoLocation
             string[] lines = l.GetInfoFromSSHServer(client, selectedGame);
             foreach (string line in lines)
             {
-                ListBoxIP.Items.Add(line);
+                if ((line.IndexOf("192.168.", StringComparison.OrdinalIgnoreCase) >= 0) == false)
+                {
+                    ListBoxIP.Items.Add(line);
+                }
             }
 
             /*

@@ -13,7 +13,6 @@ namespace IP2GeoLocation
 {
     class Logic
     {
-
         public void CreateAppConfig()
         {
             StringBuilder sb = new StringBuilder();
@@ -24,6 +23,7 @@ namespace IP2GeoLocation
             sb.AppendLine("  </startup>");
             sb.AppendLine("  <appSettings>");
             sb.AppendLine("    <add key=\"SSHserver\" value=\"10.0.0.1\" />");
+            sb.AppendLine("    <add key=\"Port\" value=\"62022\" />");
             sb.AppendLine("    <add key=\"User\" value=\"root\" />");
             sb.AppendLine("    <add key=\"Pass\" value=\"secret-pass\" />");
             sb.AppendLine("  </appSettings>");
@@ -31,42 +31,37 @@ namespace IP2GeoLocation
             File.WriteAllText(String.Concat(Application.ExecutablePath, ".config"), sb.ToString());
         }
 
-        public static bool ValidateIPv4(string ipString)
+        public bool ValidateIPv4(string ipString)
         {
             if (ipString.Count(c => c == '.') != 3) return false;
             IPAddress address;
             return IPAddress.TryParse(ipString, out address);
         }
 
-        public void GetIPsFromSSHServer(string server, string user, string pass)
+        public string[] GetInfoFromSSHServer(SshClient client, string game)
         {
-            //Set up the SSH connection
-            using (var client = new SshClient(server, user, pass))
+            SshCommand output;
+            switch (game)
             {
-                //Start the connection
-                client.Connect();
-                var output = client.RunCommand("echo test");
-                client.Disconnect();
-                Console.WriteLine(output.Result);
+                case "NHL 19":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3659 | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
+                case "Destiny 2":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3097 | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
+                case "PS4 Party":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=9307 | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
+                case "Note5":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=8999 | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
+                default:
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3659 | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
             }
-        }
-
-        public string GetUserCountryByIp(string ip)
-        {
-            IpInfo ipInfo = new IpInfo();
-            try
-            {
-                string info = new WebClient().DownloadString("http://ipinfo.io/" + ip);
-                ipInfo = JsonConvert.DeserializeObject<IpInfo>(info);
-                RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
-                ipInfo.Country = myRI1.EnglishName;
-            }
-            catch (Exception)
-            {
-                ipInfo.Country = null;
-            }
-
-            return ipInfo.Country;
+        
+            var splitString = output.Result.Split(new[] { "\n" }, StringSplitOptions.None);
+            return splitString;
         }
 
         public IpInfo GetIpInfo(string ip)
@@ -77,6 +72,10 @@ namespace IP2GeoLocation
                 WebClient webClient = new WebClient() { Encoding = Encoding.UTF8 };
                 string info = webClient.DownloadString("http://ipinfo.io/" + ip);
                 ipInfo = JsonConvert.DeserializeObject<IpInfo>(info);
+                
+                // Insert full country name
+                RegionInfo myRI1 = new RegionInfo(ipInfo.Country);
+                ipInfo.Country = myRI1.EnglishName;
             }
             catch (Exception)
             {

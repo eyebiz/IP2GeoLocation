@@ -26,6 +26,7 @@ namespace IP2GeoLocation
             comboBoxGames.Items.Clear();
             comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5" });
             comboBoxGames.SelectedIndex = 0;
+            ButtonGetIPs.Enabled = false;
 
             this.Activated += new EventHandler(Form1_Activated);
             this.ListBoxIP.SelectedValueChanged += new EventHandler(ListBoxIP_SelectedValueChanged);
@@ -62,15 +63,21 @@ namespace IP2GeoLocation
 
         private void ButtonGetIPs_Click(object sender, EventArgs e)
         {
-
-            ListBoxIP.Items.Clear();
-            string selectedGame = comboBoxGames.GetItemText(comboBoxGames.SelectedItem);
-            string[] lines = l.GetInfoFromSSHServer(client, selectedGame);
-            foreach (string line in lines)
+            if (!client.IsConnected)
             {
-                if ((line.IndexOf("192.168.", StringComparison.OrdinalIgnoreCase) >= 0) == false)
+                tsStatus.Text = "Not connected to " + sshServer;
+            }
+            else
+            {
+                ListBoxIP.Items.Clear();
+                string selectedGame = comboBoxGames.GetItemText(comboBoxGames.SelectedItem);
+                string[] lines = l.GetInfoFromSSHServer(client, selectedGame);
+                foreach (string line in lines)
                 {
-                    ListBoxIP.Items.Add(line);
+                    if ((line.IndexOf("192.168.", StringComparison.OrdinalIgnoreCase) >= 0) == false)
+                    {
+                        ListBoxIP.Items.Add(line);
+                    }
                 }
             }
 
@@ -91,11 +98,13 @@ namespace IP2GeoLocation
         {
             tsStatus.Text = "Connecting to " + sshServer;
             client = new SshClient(sshServer, sshPort, sshUser, sshPass);
+            client.ConnectionInfo.Timeout = TimeSpan.FromMinutes(10);
             client.Connect();
             //client = l.ConnectToSSHServer(sshServer, sshPort, sshUser, sshPass);
             if (client.IsConnected)
             {
                 tsStatus.Text = "Connected to " + sshServer;
+                ButtonGetIPs.Enabled = true;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -15,7 +16,16 @@ namespace IP2GeoLocation
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelDate.Text = Assembly.GetExecutingAssembly().GetLinkerTime().ToString();
             //this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            //this.textBoxDescription.Text = AssemblyDescription;
+            FileVersionInfo entityFrameworkDLL = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\EntityFramework.dll");
+            FileVersionInfo gMapNETCoreDLL = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\GMap.NET.Core.dll");
+            FileVersionInfo newtonsoftJsonDLL = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\Newtonsoft.Json.dll");
+            FileVersionInfo renciSshNetDLL = FileVersionInfo.GetVersionInfo(Application.StartupPath + @"\Renci.SshNet.dll");
+            this.textBoxDescription.Clear();
+            this.textBoxDescription.AppendText(entityFrameworkDLL.InternalName + " v" + entityFrameworkDLL.FileVersion + Environment.NewLine);
+            this.textBoxDescription.AppendText(gMapNETCoreDLL.InternalName + " v" + gMapNETCoreDLL.FileVersion + Environment.NewLine);
+            this.textBoxDescription.AppendText(newtonsoftJsonDLL.InternalName + " v" + newtonsoftJsonDLL.FileVersion + Environment.NewLine);
+            this.textBoxDescription.AppendText(renciSshNetDLL.InternalName + " v" + renciSshNetDLL.FileVersion + Environment.NewLine);
         }
 
         #region Assembly Attribute Accessors

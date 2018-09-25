@@ -44,8 +44,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ListBoxIPMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ListBoxPing = new System.Windows.Forms.ListBox();
+            this.ListBoxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -202,10 +203,10 @@
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // contextMenuStrip1
+            // ListBoxIPMenu
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.ListBoxIPMenu.Name = "contextMenuStrip1";
+            this.ListBoxIPMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // ListBoxPing
             // 
@@ -214,6 +215,11 @@
             this.ListBoxPing.Name = "ListBoxPing";
             this.ListBoxPing.Size = new System.Drawing.Size(398, 69);
             this.ListBoxPing.TabIndex = 16;
+            // 
+            // ListBoxMenu
+            // 
+            this.ListBoxMenu.Name = "ListBoxMenu";
+            this.ListBoxMenu.Size = new System.Drawing.Size(181, 26);
             // 
             // Form1
             // 
@@ -258,8 +264,9 @@
         private System.Windows.Forms.ComboBox comboBoxGames;
         private System.Windows.Forms.Button ButtonConnect;
         private GMap.NET.WindowsForms.GMapControl gMap;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip ListBoxIPMenu;
         private System.Windows.Forms.ListBox ListBoxPing;
+        private System.Windows.Forms.ContextMenuStrip ListBoxMenu;
     }
 }
 

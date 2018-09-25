@@ -36,10 +36,15 @@ namespace IP2GeoLocation
 
             var tsMenuCopy = new ToolStripMenuItem { Text = "Copy to clipboard" };
             tsMenuCopy.Click += tsMenuCopy_Click;
+            var tsMenuCopyIP = new ToolStripMenuItem { Text = "Copy to clipboard" };
+            tsMenuCopyIP.Click += tsMenuCopy_Click;
             var tsMenuPingIP = new ToolStripMenuItem { Text = "Ping IP" };
             tsMenuPingIP.Click += tsMenuPingIP_Click;
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { tsMenuCopy, tsMenuPingIP });
-            ListBoxIP.MouseDown += new MouseEventHandler(ListBoxIP_MouseDown);
+            ListBoxIPMenu.Items.AddRange(new ToolStripItem[] { tsMenuCopyIP, tsMenuPingIP });
+            ListBoxMenu.Items.AddRange(new ToolStripItem[] { tsMenuCopy });
+            ListBoxIP.MouseDown += new MouseEventHandler(ListBox_MouseDown);
+            ListBoxGeo.MouseDown += new MouseEventHandler(ListBox_MouseDown);
+            ListBoxPing.MouseDown += new MouseEventHandler(ListBox_MouseDown);
         }
 
         private void Form1_Activated(object sender, EventArgs e)
@@ -54,21 +59,32 @@ namespace IP2GeoLocation
             }
         }
 
-        private void ListBoxIP_MouseDown(object sender, MouseEventArgs e)
+        private void ListBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                var index = ListBoxIP.IndexFromPoint(e.Location);
+                ListBox lb = (ListBox)sender;
+                var index = lb.IndexFromPoint(e.Location);
                 if (index != ListBox.NoMatches)
                 {
-                    ListBoxIP.SelectedIndex = index;
-                    _selectedMenuItem = ListBoxIP.Items[index].ToString();
-                    contextMenuStrip1.Show(Cursor.Position);
-                    contextMenuStrip1.Visible = true;
+                    lb.SelectedIndex = index;
+                    _selectedMenuItem = lb.Items[index].ToString();
+                    // Show different context menus for each ListBox
+                    switch (lb.Name)
+                    {
+                        case "ListBoxIP":
+                            ListBoxIPMenu.Show(Cursor.Position);
+                            ListBoxIPMenu.Visible = true;
+                            break;
+                        default:
+                            ListBoxMenu.Show(Cursor.Position);
+                            ListBoxMenu.Visible = true;
+                            break;
+                    }
                 }
                 else
                 {
-                    contextMenuStrip1.Visible = false;
+                    ListBoxMenu.Visible = false;
                 }
             }
         }
@@ -113,18 +129,6 @@ namespace IP2GeoLocation
                 List<string> list = l.GetInfoFromSSHServer(client, selectedGame);
                 ListBoxIP.DataSource = list;
             }
-
-            /*
-            ListBoxIP.Items.Add("62.72.236.188");
-            ListBoxIP.Items.Add("90.230.121.215");
-            ListBoxIP.Items.Add("155.4.132.224");
-            ListBoxIP.Items.Add("86.0.129.209");
-            ListBoxIP.Items.Add("93.227.136.238");
-            ListBoxIP.Items.Add("213.113.23.168");
-            ListBoxIP.Items.Add("47.74.171.176");
-            ListBoxIP.Items.Add("159.153.76");
-            */
-
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
@@ -133,7 +137,6 @@ namespace IP2GeoLocation
             client = new SshClient(sshServer, sshPort, sshUser, sshPass);
             client.ConnectionInfo.Timeout = TimeSpan.FromMinutes(10);
             client.Connect();
-            //client = l.ConnectToSSHServer(sshServer, sshPort, sshUser, sshPass);
             if (client.IsConnected)
             {
                 tsStatus.Text = "Connected to " + sshServer;

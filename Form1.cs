@@ -1,5 +1,6 @@
 ﻿using Renci.SshNet;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
@@ -15,6 +16,7 @@ namespace IP2GeoLocation
         SshClient client;
         string sshServer, sshUser, sshPass;
         int sshPort;
+        private string _selectedMenuItem;
 
         public Form1()
         {
@@ -24,13 +26,20 @@ namespace IP2GeoLocation
                 l.CreateAppConfig();
             }
             comboBoxGames.Items.Clear();
-            comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5" });
+            comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5", "HTTPS" });
             comboBoxGames.SelectedIndex = 0;
             ButtonGetIPs.Enabled = false;
 
             this.Activated += new EventHandler(Form1_Activated);
             this.ListBoxIP.SelectedValueChanged += new EventHandler(ListBoxIP_SelectedValueChanged);
             this.Closed += new EventHandler(Form1_Closed);
+
+            var tsMenuCopy = new ToolStripMenuItem { Text = "Copy to clipboard" };
+            tsMenuCopy.Click += tsMenuCopy_Click;
+            var tsMenuPingIP = new ToolStripMenuItem { Text = "Ping IP" };
+            tsMenuPingIP.Click += tsMenuPingIP_Click;
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { tsMenuCopy, tsMenuPingIP });
+            ListBoxIP.MouseDown += new MouseEventHandler(ListBoxIP_MouseDown);
         }
 
         private void Form1_Activated(object sender, EventArgs e)
@@ -43,6 +52,36 @@ namespace IP2GeoLocation
                 sshUser = config.AppSettings.Settings["User"].Value;
                 sshPass = config.AppSettings.Settings["Pass"].Value;
             }
+        }
+
+        private void ListBoxIP_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var index = ListBoxIP.IndexFromPoint(e.Location);
+                if (index != ListBox.NoMatches)
+                {
+                    ListBoxIP.SelectedIndex = index;
+                    _selectedMenuItem = ListBoxIP.Items[index].ToString();
+                    contextMenuStrip1.Show(Cursor.Position);
+                    contextMenuStrip1.Visible = true;
+                }
+                else
+                {
+                    contextMenuStrip1.Visible = false;
+                }
+            }
+        }
+
+        private void tsMenuCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(_selectedMenuItem);
+        }
+
+        private void tsMenuPingIP_Click(object sender, EventArgs e)
+        {
+            ListBoxPing.Items.Clear();
+            ListBoxPing.Items.Add(l.PingIP(_selectedMenuItem));
         }
 
         private void Form1_Closed(object sender, EventArgs e)
@@ -69,16 +108,10 @@ namespace IP2GeoLocation
             }
             else
             {
-                ListBoxIP.Items.Clear();
+                ListBoxIP.DataSource = null;
                 string selectedGame = comboBoxGames.GetItemText(comboBoxGames.SelectedItem);
-                string[] lines = l.GetInfoFromSSHServer(client, selectedGame);
-                foreach (string line in lines)
-                {
-                    if ((line.IndexOf("192.168.", StringComparison.OrdinalIgnoreCase) >= 0) == false)
-                    {
-                        ListBoxIP.Items.Add(line);
-                    }
-                }
+                List<string> list = l.GetInfoFromSSHServer(client, selectedGame);
+                ListBoxIP.DataSource = list;
             }
 
             /*
@@ -112,34 +145,27 @@ namespace IP2GeoLocation
         {
             ListBox lb = (ListBox)sender;
             string selectedItem = (string)lb.SelectedItem;
-            if (l.ValidateIPv4(selectedItem)) {
-                ipInfo = l.GetIpInfo(selectedItem);
+            ipInfo = l.GetIpInfo(selectedItem);
 
-                ListBoxGeo.Items.Clear();
-                ListBoxGeo.Items.Add("IP................: " + ipInfo.IP);
-                ListBoxGeo.Items.Add("Hostname...: " + ipInfo.Hostname);
-                ListBoxGeo.Items.Add("City.............: " + ipInfo.City);
-                ListBoxGeo.Items.Add("Region........: " + ipInfo.Region);
-                ListBoxGeo.Items.Add("Country.......: " + ipInfo.Country);
-                ListBoxGeo.Items.Add("Location......: " + ipInfo.Loc);
-                ListBoxGeo.Items.Add("Organization: " + ipInfo.Org);
-                ListBoxGeo.Items.Add("Postal code.: " + ipInfo.Postal);
+            ListBoxGeo.Items.Clear();
+            ListBoxGeo.Items.Add("IP................: " + ipInfo.IP);
+            ListBoxGeo.Items.Add("Hostname...: " + ipInfo.Hostname);
+            ListBoxGeo.Items.Add("City.............: " + ipInfo.City);
+            ListBoxGeo.Items.Add("Region........: " + ipInfo.Region);
+            ListBoxGeo.Items.Add("Country.......: " + ipInfo.Country);
+            ListBoxGeo.Items.Add("Location......: " + ipInfo.Loc);
+            ListBoxGeo.Items.Add("Organization: " + ipInfo.Org);
+            ListBoxGeo.Items.Add("Postal code.: " + ipInfo.Postal);
 
-                // Get latitude and longitude from ipInfo and display on GMap
-                double lat = Double.Parse(ipInfo.Loc.Split(',')[0], CultureInfo.InvariantCulture);
-                double lng = Double.Parse(ipInfo.Loc.Split(',')[1], CultureInfo.InvariantCulture);
-                gMap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
-                GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
-                gMap.Position = new GMap.NET.PointLatLng(lat, lng);
-                gMap.MinZoom = 5;
-                gMap.MaxZoom = 100;
-                gMap.Zoom = 10;
-            }
-            else
-            {
-                ListBoxGeo.Items.Clear();
-                ListBoxGeo.Items.Add("Invalid IP");
-            }
+            // Get latitude and longitude from ipInfo and display on GMap
+            double lat = Double.Parse(ipInfo.Loc.Split(',')[0], CultureInfo.InvariantCulture);
+            double lng = Double.Parse(ipInfo.Loc.Split(',')[1], CultureInfo.InvariantCulture);
+            gMap.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+            gMap.Position = new GMap.NET.PointLatLng(lat, lng);
+            gMap.MinZoom = 5;
+            gMap.MaxZoom = 100;
+            gMap.Zoom = 10;
         }
     }
 }

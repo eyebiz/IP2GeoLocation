@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -39,10 +40,12 @@
             this.ListBoxIP = new System.Windows.Forms.ListBox();
             this.ButtonGetIPs = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.gMap = new GMap.NET.WindowsForms.GMapControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gMap = new GMap.NET.WindowsForms.GMapControl();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ListBoxPing = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -62,6 +65,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.ListBoxPing);
             this.tabPage1.Controls.Add(this.ButtonConnect);
             this.tabPage1.Controls.Add(this.comboBoxGames);
             this.tabPage1.Controls.Add(this.statusStrip1);
@@ -116,7 +120,7 @@
             this.ListBoxGeo.FormattingEnabled = true;
             this.ListBoxGeo.Location = new System.Drawing.Point(197, 34);
             this.ListBoxGeo.Name = "ListBoxGeo";
-            this.ListBoxGeo.Size = new System.Drawing.Size(398, 238);
+            this.ListBoxGeo.Size = new System.Drawing.Size(398, 160);
             this.ListBoxGeo.TabIndex = 12;
             // 
             // ListBoxIP
@@ -148,30 +152,6 @@
             this.tabPage2.Text = "Map";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configToolStripMenuItem,
-            this.aboutToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(635, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // configToolStripMenuItem
-            // 
-            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
-            this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.configToolStripMenuItem.Text = "Config";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
             // gMap
             // 
             this.gMap.Bearing = 0F;
@@ -197,6 +177,43 @@
             this.gMap.Size = new System.Drawing.Size(591, 300);
             this.gMap.TabIndex = 0;
             this.gMap.Zoom = 5D;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.configToolStripMenuItem,
+            this.aboutToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(635, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // configToolStripMenuItem
+            // 
+            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
+            this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.configToolStripMenuItem.Text = "Config";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // ListBoxPing
+            // 
+            this.ListBoxPing.FormattingEnabled = true;
+            this.ListBoxPing.Location = new System.Drawing.Point(197, 203);
+            this.ListBoxPing.Name = "ListBoxPing";
+            this.ListBoxPing.Size = new System.Drawing.Size(398, 69);
+            this.ListBoxPing.TabIndex = 16;
             // 
             // Form1
             // 
@@ -241,6 +258,8 @@
         private System.Windows.Forms.ComboBox comboBoxGames;
         private System.Windows.Forms.Button ButtonConnect;
         private GMap.NET.WindowsForms.GMapControl gMap;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ListBox ListBoxPing;
     }
 }
 

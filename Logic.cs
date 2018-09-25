@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Renci.SshNet;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Windows.Forms;
 
@@ -34,11 +35,25 @@ namespace IP2GeoLocation
         public bool ValidateIPv4(string ipString)
         {
             if (ipString.Count(c => c == '.') != 3) return false;
-            IPAddress address;
-            return IPAddress.TryParse(ipString, out address);
+            if (ipString.StartsWith("192.168.") || ipString.StartsWith("10.")) return false; // Remove LAN addresses
+            return IPAddress.TryParse(ipString, out IPAddress address);
         }
 
-        public string[] GetInfoFromSSHServer(SshClient client, string game)
+        public string PingIP(string ip)
+        {
+            Ping p = new Ping();
+            PingReply r;
+            r = p.Send(ip);
+
+            if (r.Status == IPStatus.Success)
+            {
+                 return "Ping to " + ip + " successful."
+                   + " Response time: " + r.RoundtripTime.ToString() + " ms";
+            }
+            return "Unable to ping selected IP";
+        }
+
+        public List<string> GetInfoFromSSHServer(SshClient client, string game)
         {
             SshCommand output;
             switch (game)
@@ -55,13 +70,23 @@ namespace IP2GeoLocation
                 case "Note5":
                     output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=8999 | awk '{print $7}' | sed 's/dst=//g'");
                     break;
+                case "HTTPS":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep dport=443 | awk '{print $8}' | sed 's/dst=//g'");
+                    break;
                 default:
                     output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3659 | awk '{print $7}' | sed 's/dst=//g'");
                     break;
             }
-        
-            var splitString = output.Result.Split(new[] { "\n" }, StringSplitOptions.None);
-            return splitString;
+            //var splitString = output.Result.Split(new[] { "\n" }, StringSplitOptions.None);
+            var unsortedIPs = output.Result.Split('\n').ToList();
+            //var unsortedIPs = output.Result.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
+            unsortedIPs.RemoveAll(elem => !ValidateIPv4(elem));
+            var sortedIPs = unsortedIPs
+                .Select(Version.Parse)
+                .OrderBy(arg => arg)
+                .Select(arg => arg.ToString())
+                .ToList();
+            return sortedIPs;
         }
 
         public IpInfo GetIpInfo(string ip)

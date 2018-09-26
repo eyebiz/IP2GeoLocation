@@ -50,7 +50,7 @@ namespace IP2GeoLocation
                  return "Ping to " + ip + " successful."
                    + " Response time: " + r.RoundtripTime.ToString() + " ms";
             }
-            return "Unable to ping selected IP";
+            return "No response from " +ip;
         }
 
         public List<string> GetInfoFromSSHServer(SshClient client, string game)

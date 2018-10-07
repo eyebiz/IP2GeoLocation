@@ -81,6 +81,7 @@ namespace IP2GeoLocation
             var unsortedIPs = output.Result.Split('\n').ToList();
             //var unsortedIPs = output.Result.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
             unsortedIPs.RemoveAll(elem => !ValidateIPv4(elem));
+            unsortedIPs = unsortedIPs.Distinct().ToList();
             var sortedIPs = unsortedIPs
                 .Select(Version.Parse)
                 .OrderBy(arg => arg)

@@ -121,6 +121,7 @@ namespace IP2GeoLocation
             if (!client.IsConnected)
             {
                 tsStatus.Text = "Not connected to " + sshServer;
+                ButtonGetIPs.Enabled = false;
             }
             else
             {

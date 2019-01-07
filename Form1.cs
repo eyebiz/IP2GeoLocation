@@ -91,7 +91,7 @@ namespace IP2GeoLocation
 
         private void tsMenuCopy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(_selectedMenuItem);
+            Clipboard.SetDataObject(_selectedMenuItem,false,5,200);
         }
 
         private void tsMenuPingIP_Click(object sender, EventArgs e)

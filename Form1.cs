@@ -55,7 +55,7 @@ namespace IP2GeoLocation
                 sshServer = config.AppSettings.Settings["SSHserver"].Value;
                 sshPort = Int32.Parse(config.AppSettings.Settings["Port"].Value);
                 sshUser = config.AppSettings.Settings["User"].Value;
-                sshPass = config.AppSettings.Settings["Pass"].Value;
+                sshPass = Logic.ToInsecureString(Logic.DecryptString(config.AppSettings.Settings["Pass"].Value));
             }
         }
 
@@ -130,6 +130,12 @@ namespace IP2GeoLocation
                 List<string> list = l.GetInfoFromSSHServer(client, selectedGame);
                 ListBoxIP.DataSource = list;
             }
+        }
+
+        private void configToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigForm aboutBox = new ConfigForm();
+            aboutBox.ShowDialog();
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)

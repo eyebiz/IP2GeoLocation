@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.ListBoxPing = new System.Windows.Forms.ListBox();
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.comboBoxGames = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -45,7 +46,6 @@
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ListBoxIPMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ListBoxPing = new System.Windows.Forms.ListBox();
             this.ListBoxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,6 +80,14 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Data";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // ListBoxPing
+            // 
+            this.ListBoxPing.FormattingEnabled = true;
+            this.ListBoxPing.Location = new System.Drawing.Point(197, 203);
+            this.ListBoxPing.Name = "ListBoxPing";
+            this.ListBoxPing.Size = new System.Drawing.Size(398, 69);
+            this.ListBoxPing.TabIndex = 16;
             // 
             // ButtonConnect
             // 
@@ -195,6 +203,7 @@
             this.configToolStripMenuItem.Name = "configToolStripMenuItem";
             this.configToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.configToolStripMenuItem.Text = "Config";
+            this.configToolStripMenuItem.Click += new System.EventHandler(this.configToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -208,18 +217,10 @@
             this.ListBoxIPMenu.Name = "contextMenuStrip1";
             this.ListBoxIPMenu.Size = new System.Drawing.Size(61, 4);
             // 
-            // ListBoxPing
-            // 
-            this.ListBoxPing.FormattingEnabled = true;
-            this.ListBoxPing.Location = new System.Drawing.Point(197, 203);
-            this.ListBoxPing.Name = "ListBoxPing";
-            this.ListBoxPing.Size = new System.Drawing.Size(398, 69);
-            this.ListBoxPing.TabIndex = 16;
-            // 
             // ListBoxMenu
             // 
             this.ListBoxMenu.Name = "ListBoxMenu";
-            this.ListBoxMenu.Size = new System.Drawing.Size(181, 26);
+            this.ListBoxMenu.Size = new System.Drawing.Size(61, 4);
             // 
             // Form1
             // 

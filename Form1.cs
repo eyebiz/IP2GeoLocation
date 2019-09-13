@@ -26,7 +26,7 @@ namespace IP2GeoLocation
                 l.CreateAppConfig();
             }
             comboBoxGames.Items.Clear();
-            comboBoxGames.Items.AddRange(new string[] { "NHL 19", "Destiny 2", "PS4 Party", "Note5", "HTTPS" });
+            comboBoxGames.Items.AddRange(new string[] { "EA NHL", "Destiny 2", "PS4 Party", "Note5", "HTTPS" });
             comboBoxGames.SelectedIndex = 0;
             ButtonGetIPs.Enabled = false;
 

@@ -79,7 +79,7 @@ namespace IP2GeoLocation
             sb.AppendLine("  </startup>");
             sb.AppendLine("  <appSettings>");
             sb.AppendLine("    <add key=\"SSHserver\" value=\"10.0.0.1\" />");
-            sb.AppendLine("    <add key=\"Port\" value=\"62022\" />");
+            sb.AppendLine("    <add key=\"Port\" value=\"42022\" />");
             sb.AppendLine("    <add key=\"User\" value=\"root\" />");
             sb.AppendLine("    <add key=\"Pass\" value=\"secret-pass\" />");
             sb.AppendLine("  </appSettings>");
@@ -113,7 +113,7 @@ namespace IP2GeoLocation
             SshCommand output;
             switch (game)
             {
-                case "NHL 19":
+                case "EA NHL":
                     output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3659 | awk '{print $7}' | sed 's/dst=//g'");
                     break;
                 case "Destiny 2":

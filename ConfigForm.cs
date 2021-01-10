@@ -15,7 +15,8 @@ namespace IP2GeoLocation
             tbServer.Text = config.AppSettings.Settings["SSHserver"].Value;
             tbPort.Text = config.AppSettings.Settings["Port"].Value;
             tbUsername.Text = config.AppSettings.Settings["User"].Value;
-            tbPassword.Text = Logic.ToInsecureString(Logic.DecryptString(config.AppSettings.Settings["Pass"].Value));
+            tbPassword.Text = "[REDACTED]";
+            //tbPassword.Text = Logic.ToInsecureString(Logic.DecryptString(config.AppSettings.Settings["Pass"].Value));
         }
 
         private void btnConfigSave_Click(object sender, EventArgs e)

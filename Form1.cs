@@ -143,11 +143,18 @@ namespace IP2GeoLocation
             tsStatus.Text = "Connecting to " + sshServer;
             client = new SshClient(sshServer, sshPort, sshUser, sshPass);
             client.ConnectionInfo.Timeout = TimeSpan.FromMinutes(10);
-            client.Connect();
-            if (client.IsConnected)
+            try
             {
-                tsStatus.Text = "Connected to " + sshServer;
-                ButtonGetIPs.Enabled = true;
+                client.Connect();
+                if (client.IsConnected)
+                {
+                    tsStatus.Text = "Connected to " + sshServer;
+                    ButtonGetIPs.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                tsStatus.Text = "Connection failed: " + ex.Message;
             }
         }
 

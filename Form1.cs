@@ -17,6 +17,8 @@ namespace IP2GeoLocation
         string sshServer, sshUser, sshPass;
         int sshPort;
         private string _selectedMenuItem;
+        private Timer timer1;
+        private int timerCounter;
 
         public Form1()
         {
@@ -150,12 +152,26 @@ namespace IP2GeoLocation
                 {
                     tsStatus.Text = "Connected to " + sshServer;
                     ButtonGetIPs.Enabled = true;
+                    timerCounter = 600;
+                    timer1 = new Timer();
+                    timer1.Tick += new EventHandler(timer1_Tick);
+                    timer1.Interval = 1000; // 1 second
+                    timer1.Start();
+                    lblTimer.Text = timerCounter.ToString();
                 }
             }
             catch (Exception ex)
             {
                 tsStatus.Text = "Connection failed: " + ex.Message;
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timerCounter--;
+            if (timerCounter == 0)
+                timer1.Stop();
+            lblTimer.Text = timerCounter.ToString();
         }
 
         private void ListBoxIP_SelectedValueChanged(object sender, EventArgs e)

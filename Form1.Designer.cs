@@ -47,6 +47,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ListBoxIPMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ListBoxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.lblTimer = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -66,6 +67,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblTimer);
             this.tabPage1.Controls.Add(this.ListBoxPing);
             this.tabPage1.Controls.Add(this.ButtonConnect);
             this.tabPage1.Controls.Add(this.comboBoxGames);
@@ -222,6 +224,15 @@
             this.ListBoxMenu.Name = "ListBoxMenu";
             this.ListBoxMenu.Size = new System.Drawing.Size(61, 4);
             // 
+            // lblTimer
+            // 
+            this.lblTimer.AutoSize = true;
+            this.lblTimer.Location = new System.Drawing.Point(570, 10);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(25, 13);
+            this.lblTimer.TabIndex = 17;
+            this.lblTimer.Text = "000";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,6 +279,7 @@
         private System.Windows.Forms.ContextMenuStrip ListBoxIPMenu;
         private System.Windows.Forms.ListBox ListBoxPing;
         private System.Windows.Forms.ContextMenuStrip ListBoxMenu;
+        private System.Windows.Forms.Label lblTimer;
     }
 }
 

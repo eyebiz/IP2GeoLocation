@@ -131,6 +131,7 @@ namespace IP2GeoLocation
                 string selectedGame = comboBoxGames.GetItemText(comboBoxGames.SelectedItem);
                 List<string> list = l.GetInfoFromSSHServer(client, selectedGame);
                 ListBoxIP.DataSource = list;
+                timerCounter = 600;
             }
         }
 

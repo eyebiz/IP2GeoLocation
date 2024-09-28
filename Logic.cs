@@ -119,6 +119,9 @@ namespace IP2GeoLocation
                 case "Destiny 2":
                     output = client.RunCommand("cat /proc/net/nf_conntrack | grep sport=3097 | awk '{print $7}' | sed 's/dst=//g'");
                     break;
+                case "Warframe":
+                    output = client.RunCommand("cat /proc/net/nf_conntrack | grep 'sport=495.' | awk '{print $7}' | sed 's/dst=//g'");
+                    break;
                 case "PS4 Party":
                     output = client.RunCommand("cat /proc/net/nf_conntrack | grep src=10.0.0.104 | grep -v sport=3478 | grep -v sport=443 | grep -v dst=10.0.0.1 | awk '{print $7}' | sed 's/dst=//g'");
                     break;
